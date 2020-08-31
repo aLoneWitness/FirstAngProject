@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {HttpsInterceptor} from './interceptors/https.interceptor';
-import { FormsModule } from '@angular/forms';
+import {HttpsInterceptor} from './_interceptors/https.interceptor';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { nl_NL } from 'ng-zorro-antd/i18n';
@@ -23,6 +23,7 @@ registerLocaleData(nl);
     HomeComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
