@@ -10,15 +10,21 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { nl_NL } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import nl from '@angular/common/locales/nl';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
+import {AppRoutingModule} from './routing.module';
 
 registerLocaleData(nl);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule
