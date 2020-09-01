@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthenticationService} from '../_services/auth.service';
-import {FormControl, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {catchError, first} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {throwError} from 'rxjs';
@@ -12,22 +12,24 @@ import {throwError} from 'rxjs';
   providers: [AuthenticationService]
 })
 export class LoginComponent implements OnInit {
-  email = new FormControl();
-  password = new FormControl();
+  validateForm: FormGroup;
   lastLoginFailed = false;
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) {
-    this.password.setValidators([Validators.minLength(8), Validators.required]);
-    this.email.setValidators([Validators.email, Validators.required]);
+  constructor(private authenticationService: AuthenticationService, private router: Router, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
+    this.validateForm = this.fb.group({
+      email: [localStorage.getItem('rememberedEmail'), [Validators.email, Validators.required]],
+      password: [null, [Validators.required, Validators.minLength(8)]],
+      rememberMe: [true]
+    });
   }
 
-  login(e): void {
+  submitForm(e): void {
     e.preventDefault();
-    if (this.email.valid && this.password.valid){
-      this.authenticationService.login(this.email.value, this.password.value)
+    if (this.validateForm.valid){
+      this.authenticationService.login(this.validateForm.controls.email.value, this.validateForm.controls.password.value)
         .pipe(first(), catchError(err => {
           if (err.status && err.status === 401) {
             this.lastLoginFailed = true;
@@ -35,11 +37,15 @@ export class LoginComponent implements OnInit {
           }
         }))
         .subscribe(data => {
+          if (this.validateForm.controls.rememberMe.value === true){
+            localStorage.setItem('rememberedEmail', this.validateForm.controls.email.value);
+          }
+          else {
+            localStorage.removeItem('rememberedEmail');
+          }
           this.router.navigate(['home']);
         }
       );
     }
-
-    // this.authenticationService.login(, this.password);
   }
 }

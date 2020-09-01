@@ -15,7 +15,7 @@ import { HomeComponent } from './home/home.component';
 import {AppRoutingModule} from './routing.module';
 import {AuthInterceptor} from './_interceptors/auth.interceptor';
 import {ErrorInterceptor} from './_interceptors/error.interceptor';
-import {NzPageHeaderModule} from 'ng-zorro-antd';
+import {NzCheckboxModule, NzFormModule, NzPageHeaderModule} from 'ng-zorro-antd';
 import { ProfileComponent } from './profile/profile.component';
 import {AuthGuardService} from './_services/auth-guard.service';
 import {JWT_OPTIONS, JwtHelperService, JwtModule, JwtModuleOptions} from '@auth0/angular-jwt';
@@ -38,6 +38,8 @@ registerLocaleData(nl);
     FormsModule,
     BrowserAnimationsModule,
     NzPageHeaderModule,
+    NzCheckboxModule,
+    NzFormModule,
   ],
   providers: [
     // AppComponent,

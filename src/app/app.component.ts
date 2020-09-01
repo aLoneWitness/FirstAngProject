@@ -8,7 +8,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(private authService: AuthenticationService, private router: Router) {
+  constructor(public authService: AuthenticationService, private router: Router) {
   }
   title = 'FirstAngProject';
 
