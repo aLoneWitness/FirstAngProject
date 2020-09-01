@@ -13,6 +13,10 @@ import nl from '@angular/common/locales/nl';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import {AppRoutingModule} from './routing.module';
+import {AuthInterceptor} from './_interceptors/auth.interceptor';
+import {ErrorInterceptor} from './_interceptors/error.interceptor';
+import {NzPageHeaderModule} from 'ng-zorro-antd';
+import { ProfileComponent } from './profile/profile.component';
 
 registerLocaleData(nl);
 
@@ -20,7 +24,8 @@ registerLocaleData(nl);
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    ProfileComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -28,11 +33,14 @@ registerLocaleData(nl);
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NzPageHeaderModule
   ],
   providers: [
-    AppComponent,
+    // AppComponent,
     { provide: HTTP_INTERCEPTORS, useClass: HttpsInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     { provide: NZ_I18N, useValue: nl_NL }
   ],
   bootstrap: [AppComponent]

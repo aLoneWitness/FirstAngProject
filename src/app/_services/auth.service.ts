@@ -21,6 +21,7 @@ export class AuthenticationService {
   login(email: string, password: string) {
     return this.http.post<any>(`/auth/login`, { email, password })
       .pipe(map(data => {
+        console.log('MAPPING');
         localStorage.setItem('userToken', JSON.stringify(data.token));
         this.currentUserSubject.next(data);
         return data;

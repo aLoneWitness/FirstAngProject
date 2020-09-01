@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthenticationService} from '../_services/auth.service';
 import {FormControl, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import {catchError, first} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {throwError} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import {Router} from '@angular/router';
 export class LoginComponent implements OnInit {
   email = new FormControl();
   password = new FormControl();
+  lastLoginFailed = false;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     this.password.setValidators([Validators.minLength(8), Validators.required]);
@@ -22,13 +24,19 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  login(): void {
+  login(e): void {
+    e.preventDefault();
     if (this.email.valid && this.password.valid){
       this.authenticationService.login(this.email.value, this.password.value)
-        .pipe(first())
+        .pipe(first(), catchError(err => {
+          if (err.status && err.status === 401) {
+            this.lastLoginFailed = true;
+            return throwError(err);
+          }
+        }))
         .subscribe(data => {
           this.router.navigate(['home']);
-        },
+        }
       );
     }
 
