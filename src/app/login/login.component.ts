@@ -8,8 +8,7 @@ import {throwError} from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  providers: [AuthenticationService]
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   validateForm: FormGroup;
@@ -21,7 +20,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       email: [localStorage.getItem('rememberedEmail'), [Validators.email, Validators.required]],
-      password: [null, [Validators.required, Validators.minLength(8)]],
+      password: ['zrNqH8PDMdwL', [Validators.required, Validators.minLength(8)]],
       rememberMe: [true]
     });
   }
@@ -37,13 +36,14 @@ export class LoginComponent implements OnInit {
           }
         }))
         .subscribe(data => {
+          console.log('LOGIN SUCCESS');
           if (this.validateForm.controls.rememberMe.value === true){
             localStorage.setItem('rememberedEmail', this.validateForm.controls.email.value);
           }
           else {
             localStorage.removeItem('rememberedEmail');
           }
-          this.router.navigate(['home']);
+          this.router.navigate(['']).catch(err => console.log('Unable to route', err));
         }
       );
     }

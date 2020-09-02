@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AuthenticationService} from './_services/auth.service';
 import {Router} from '@angular/router';
+import {User} from './_models/user';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,19 @@ import {Router} from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  public currentUser: User;
+  public isAuthenticated: boolean;
+
   constructor(public authService: AuthenticationService, private router: Router) {
+    this.currentUser = new User();
+    authService.currentUser.subscribe(data => {
+      this.currentUser = data;
+    });
+
+    authService.isAuthenticated.subscribe(data => {
+      console.log("ISAUTHENTICATION IS NOW: ", data);
+      this.isAuthenticated = data;
+    });
   }
   title = 'FirstAngProject';
 

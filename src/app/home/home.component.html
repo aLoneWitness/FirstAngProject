@@ -1,1 +1,23 @@
-hi i am homepage very interesting
+
+  <nz-table #basicTable [nzData]="userBatch">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email Address</th>
+      <th></th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of userBatch">
+      <td>{{data.lastName + ', ' + data.firstName }}</td>
+      <td>{{data.email}}</td>
+      <td>{{data.address}}</td>
+      <td>
+        <a>Action 一 {{data.name}}</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a>Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>

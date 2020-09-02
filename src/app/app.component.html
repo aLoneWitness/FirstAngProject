@@ -10,7 +10,7 @@
   </div>
   <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
     <div class="text-sm lg:flex-grow">
-      <a routerLink="home" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+      <a routerLink="" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
         Home
       </a>
       <a routerLink="profile" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
@@ -18,8 +18,34 @@
       </a>
     </div>
     <div>
-      <a *ngIf="!authService.isAuthenticated()" routerLink="login" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</a>
-      <a *ngIf="authService.isAuthenticated()" (click)="logout()" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Logout</a>
+      <nz-button-group *ngIf="isAuthenticated">
+        <button [nzDropdownMenu]="menu" nz-dropdown nz-button><i nz-icon nzType="down"></i>{{currentUser?.firstName}}</button>
+        <button nz-button nzPlacement="bottomRight">
+          <i nz-icon>
+            <img src="{{currentUser?.avatar}}" alt="<3" style="transform: scale(1.7)">
+          </i>
+        </button>
+      </nz-button-group>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item>My Profile</li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item class="logout" (click)="logout()">
+            Logout
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+
+      <nz-button-group *ngIf="!isAuthenticated">
+        <button nz-dropdown nz-button routerLink="login">Login</button>
+        <button nz-button nzPlacement="bottomRight">
+          <i nz-icon nzType="user"></i>
+        </button>
+      </nz-button-group>
+
+
+<!--      <a (click)="logout()">logout lol</a>-->
     </div>
   </div>
 </nav>
