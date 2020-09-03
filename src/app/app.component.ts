@@ -19,7 +19,6 @@ export class AppComponent {
     });
 
     authService.isAuthenticated.subscribe(data => {
-      console.log("ISAUTHENTICATION IS NOW: ", data);
       this.isAuthenticated = data;
     });
   }
@@ -28,5 +27,9 @@ export class AppComponent {
   public logout(): void {
     this.authService.logout();
     this.router.navigate(['login']);
+  }
+
+  public goToMyProfile(): void {
+    this.router.navigate(['profile', { id: this.currentUser.id }]);
   }
 }

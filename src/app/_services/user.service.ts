@@ -1,17 +1,33 @@
 import { Injectable } from '@angular/core';
 import {User} from '../_models/user';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {first, map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private userListSubject: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>(new Array<User>());
-  private totalUserAmountSubject: BehaviorSubject<number> = new BehaviorSubject<number>(null);
-
   constructor(private http: HttpClient) {
+  }
+
+  private static jsonToUserModel(userObject): User {
+    const user = new User();
+    user.firstName = userObject.firstName;
+    user.lastName = userObject.lastName;
+    user.avatar = userObject.avatar;
+    user.email = userObject.email;
+    user.id = userObject.id;
+    user.createdAt = userObject.created_at;
+    user.updatedAt = userObject.updated_at;
+    user.password = userObject.password;
+    return user;
+  }
+
+  public getUserByID(id: number): Observable<User> {
+    return this.http.get<any>(`/users/` + id).pipe(map(userObject => {
+      return UserService.jsonToUserModel(userObject);
+    }));
   }
 
   public getTotalUserAmount(): Observable<number> {
@@ -25,15 +41,16 @@ export class UserService {
     return this.http.get<any>(`/users?offset=` + offset + '&limit=' + limit).pipe(map(responseData => {
       const userList: Array<User> = new Array<User>();
       responseData.data.forEach(userObject => {
-        const user = new User();
-        user.firstName = userObject.firstName;
-        user.lastName = userObject.lastName;
-        user.avatar = userObject.avatar;
-        user.email = userObject.email;
-        userList.push(user);
+        userList.push(UserService.jsonToUserModel(userObject));
       });
 
       return userList;
+    }));
+  }
+
+  public deleteUserByID(id: number): Observable<boolean> {
+    return this.http.delete<any>(`/users/` + id, { observe: 'response' }).pipe(map(httpResponse => {
+      return httpResponse.ok;
     }));
   }
 }

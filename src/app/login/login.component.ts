@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../_services/auth.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {catchError, first} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {throwError} from 'rxjs';
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       email: [localStorage.getItem('rememberedEmail'), [Validators.email, Validators.required]],
-      password: ['zrNqH8PDMdwL', [Validators.required, Validators.minLength(8)]],
+      password: [null, [Validators.required, Validators.minLength(6)]],
       rememberMe: [true]
     });
   }

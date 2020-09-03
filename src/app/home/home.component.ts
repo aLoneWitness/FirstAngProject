@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from '../_models/user';
 import {UserService} from '../_services/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
   public currentPage: number;
   public loading = true;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private route: Router) {
     this.pageSize = 6;
   }
 
@@ -33,5 +34,9 @@ export class HomeComponent implements OnInit {
       this.userBatch = users;
       this.loading = false;
     });
+  }
+
+  routeToProfile(id): void {
+    this.route.navigate(['profile', { id } ]);
   }
 }
