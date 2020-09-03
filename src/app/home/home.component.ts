@@ -13,6 +13,9 @@ export class HomeComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+    this.userService.getTotalUserAmount().subscribe(result => {
+      console.log(result);
+    });
   }
 
   // public switchPage(pageNumber): void {

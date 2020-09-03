@@ -6,19 +6,21 @@ import {AuthenticationService} from '../_services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpsInterceptor {
-  constructor(private authenticationService: AuthenticationService) {
+  private jwt: string;
 
+  constructor(private authenticationService: AuthenticationService) {
+    authenticationService.currentUserToken.subscribe(newToken => {
+      this.jwt = newToken;
+    });
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const jwt = localStorage.getItem('userToken');
     let newRequest = req;
 
-    // CODE MAGIC KEEP HERE
-    if (!!jwt) {
-       newRequest = req.clone({
+    if (!!this.jwt) {
+      newRequest = req.clone({
         setHeaders: {
-          Authorization: jwt
+          Authorization: 'Bearer ' + this.jwt
         }
       });
     }

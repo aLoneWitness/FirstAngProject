@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, tap} from 'rxjs/operators';
+import {first, map, tap} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {User} from '../_models/user';
 import {JwtHelperService} from '@auth0/angular-jwt';
@@ -37,15 +37,12 @@ export class AuthenticationService {
     this.currentUserIsAuthenticatedSubject.next(true);
 
     return this.http.post<any>(`/auth/login`, { email, password })
-      .pipe(map(data => {
-        localStorage.setItem('userToken', JSON.stringify(data.token));
+      .pipe(first(data => {
+        localStorage.setItem('userToken', data.token);
         const tokenData = this.jwtHelper.decodeToken(data.token);
         this.currentUserSubject.next(tokenData);
         this.currentUserTokenSubject.next(data.token);
-        const returnValue = true;
-        console.log('SETTING', returnValue);
         this.currentUserIsAuthenticatedSubject.next(true);
-        console.log('LOGIN COMPLETE', returnValue);
         return data;
       }) );
   }
