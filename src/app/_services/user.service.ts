@@ -20,10 +20,20 @@ export class UserService {
   }
 
   public getUserList(offset: number, limit: number): Observable<Array<User>> {
-    const ourParams = new HttpParams();
-    ourParams.set('offset', String(offset));
-    ourParams.set('limit', String(limit));
+    // TODO: Implement HTTPParams?
 
-    return this.http.get<any>(`/users`, {params: ourParams}).pipe();
+    return this.http.get<any>(`/users?offset=` + offset + '&limit=' + limit).pipe(map(responseData => {
+      const userList: Array<User> = new Array<User>();
+      responseData.data.forEach(userObject => {
+        const user = new User();
+        user.firstName = userObject.firstName;
+        user.lastName = userObject.lastName;
+        user.avatar = userObject.avatar;
+        user.email = userObject.email;
+        userList.push(user);
+      });
+
+      return userList;
+    }));
   }
 }

@@ -1,22 +1,20 @@
 
-  <nz-table #basicTable [nzData]="userBatch">
+  <nz-table #basicTable [nzData]="userBatch" [nzFrontPagination]="false" [nzTotal]="totalUserAmount" [nzPageSize]="pageSize" [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzLoading]="loading">
     <thead>
     <tr>
+      <th>Picture</th>
       <th>Name</th>
       <th>Email Address</th>
-      <th></th>
       <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let user of userBatch">
-      <td>{{data.lastName + ', ' + data.firstName }}</td>
-      <td>{{data.email}}</td>
-      <td>{{data.address}}</td>
+      <td><img src="{{user.avatar}}" alt="No Picture" style="max-width: 50px"></td>
+      <td>{{user.lastName + ', ' + user.firstName }}</td>
+      <td>{{user.email}}</td>
       <td>
-        <a>Action 一 {{data.name}}</a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a>Delete</a>
+        <a style="color: darkred">Delete</a>
       </td>
     </tr>
     </tbody>
