@@ -53,4 +53,10 @@ export class UserService {
       return httpResponse.ok;
     }));
   }
+
+  public updateUserByID(user: User): Observable<User> {
+    return this.http.put('/users/' + user.id.toString(), { user }).pipe(map(responseData => {
+      return UserService.jsonToUserModel(responseData);
+    }));
+  }
 }

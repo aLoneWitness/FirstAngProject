@@ -16,16 +16,10 @@ export class ProfileComponent implements OnInit {
   public user: User = new User();
   public modal?: NzModalRef;
   public formGroup: FormGroup;
+  private isFormLoading = false;
 
   constructor(private route: Router, private activatedRoute: ActivatedRoute,
               private userService: UserService, private modalService: NzModalService, private fb: FormBuilder) {
-    this.formGroup = this.fb.group({
-      avatar: [this.user.avatar, [Validators.required]],
-      email: [this.user.email, [Validators.required, Validators.email]],
-      firstName: [this.user.firstName, [Validators.required]],
-      lastName: [this.user.lastName, [Validators.required]],
-      password: [this.user.password, [Validators.required, Validators.minLength(6)]]
-    });
   }
 
   ngOnInit(): void {
@@ -36,6 +30,14 @@ export class ProfileComponent implements OnInit {
 
     this.userService.getUserByID(userId).subscribe(userData => {
       this.user = userData;
+
+      this.formGroup = this.fb.group({
+        avatar: [this.user.avatar, [Validators.required]],
+        email: [this.user.email, [Validators.required, Validators.email]],
+        firstName: [this.user.firstName, [Validators.required]],
+        lastName: [this.user.lastName, [Validators.required]],
+        password: [this.user.password, [Validators.required, Validators.minLength(6)]]
+      });
     });
   }
 
@@ -55,10 +57,22 @@ export class ProfileComponent implements OnInit {
       nzTitle: 'Edit User Profile',
       nzContent: tplContent,
       nzClosable: false,
+      nzOkText: 'Save',
+      nzOnOk: () => {
+        
+      },
+      nzOkLoading: this.isFormLoading
     });
   }
 
-  submitForm(value: any): void {
-    console.log(this.formGroup.valid);
+  submitForm(e): void {
+    const newUser: User = new User();
+    newUser.firstName = this.formGroup.controls.firstName.value;
+    newUser.password = this.formGroup.controls.password.value;
+    newUser.lastName = this.formGroup.controls.lastName.value;
+    newUser.email = this.formGroup.controls.
+    this.userService.updateUserByID(this.formGroup.).subscribe(user => {
+      this.user = user;
+    });
   }
 }

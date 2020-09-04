@@ -22,18 +22,37 @@
 </div>
 
 <ng-template #tplContent let-params let-ref="modalRef">
-  <form nz-form [nzLayout]="'inline'" [formGroup]="formGroup" (ngSubmit)="submitForm($event)">
-    <div>
+  <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup" (ngSubmit)="submitForm($event)">
+    <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
         Email
       </label>
       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="jarpis@jarpis.nl" formControlName="email">
     </div>
-    <div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="firstName">
+        First Name
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="firstName" type="text" placeholder="Mark" formControlName="firstName">
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="lastName">
+        Last Name
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lastName" type="text" placeholder="Zuckerberg" formControlName="lastName">
+    </div>
+    <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
         Password
       </label>
       <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" formControlName="password">
     </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="avatar">
+        Avatar URL
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="avatar" type="url" placeholder="https://robohash.org/reruminventorerem.jpg?size=100x100&set=set1" formControlName="avatar">
+    </div>
+    <img src="{{this.formGroup.controls['avatar'].value}}" alt="No Avatar">
   </form>
 </ng-template>
