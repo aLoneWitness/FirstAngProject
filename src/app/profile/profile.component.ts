@@ -1,8 +1,6 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
 import {User} from '../_models/user';
 import {ActivatedRoute, Router} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
 import {UserService} from '../_services/user.service';
 import {NzModalRef, NzModalService} from 'ng-zorro-antd';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -14,12 +12,19 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class ProfileComponent implements OnInit {
   public user: User = new User();
-  public modal?: NzModalRef;
   public formGroup: FormGroup;
-  private isFormLoading = false;
+  public isFormLoading = false;
+  public isModalVisible = false;
 
   constructor(private route: Router, private activatedRoute: ActivatedRoute,
               private userService: UserService, private modalService: NzModalService, private fb: FormBuilder) {
+    this.formGroup = this.fb.group({
+      avatar: [this.user.avatar, [Validators.required]],
+      email: [this.user.email, [Validators.required, Validators.email]],
+      firstName: [this.user.firstName, [Validators.required]],
+      lastName: [this.user.lastName, [Validators.required]],
+      password: [this.user.password, [Validators.required, Validators.minLength(6)]]
+    });
   }
 
   ngOnInit(): void {
@@ -31,13 +36,11 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserByID(userId).subscribe(userData => {
       this.user = userData;
 
-      this.formGroup = this.fb.group({
-        avatar: [this.user.avatar, [Validators.required]],
-        email: [this.user.email, [Validators.required, Validators.email]],
-        firstName: [this.user.firstName, [Validators.required]],
-        lastName: [this.user.lastName, [Validators.required]],
-        password: [this.user.password, [Validators.required, Validators.minLength(6)]]
-      });
+      this.formGroup.controls.avatar.setValue(this.user.avatar);
+      this.formGroup.controls.email.setValue(this.user.email);
+      this.formGroup.controls.firstName.setValue(this.user.firstName);
+      this.formGroup.controls.lastName.setValue(this.user.lastName);
+      this.formGroup.controls.password.setValue(this.user.password);
     });
   }
 
@@ -52,27 +55,34 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  openEditProfileModal(tplContent: TemplateRef<{}>): void {
-    this.modal = this.modalService.create({
-      nzTitle: 'Edit User Profile',
-      nzContent: tplContent,
-      nzClosable: false,
-      nzOkText: 'Save',
-      nzOnOk: () => {
-        
-      },
-      nzOkLoading: this.isFormLoading
+  openEditProfileModal(): void {
+    this.isModalVisible = true;
+  }
+
+  submitForm(e?: Event): void {
+    console.log("FORM SUBMISSION")
+    if (e) {
+      console.log("EVENT GIVEN");
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    this.isFormLoading = true;
+    const newUser: User = new User();
+    newUser.id = this.user.id;
+    newUser.firstName = this.formGroup.controls.firstName.value;
+    newUser.lastName = this.formGroup.controls.lastName.value;
+    newUser.email = this.formGroup.controls.email.value;
+    newUser.password = this.formGroup.controls.password.value;
+    newUser.avatar = this.formGroup.controls.avatar.value;
+
+    this.userService.updateUserByID(newUser).subscribe(user => {
+      this.user = user;
+      this.isFormLoading = false;
+      this.isModalVisible = false;
     });
   }
 
-  submitForm(e): void {
-    const newUser: User = new User();
-    newUser.firstName = this.formGroup.controls.firstName.value;
-    newUser.password = this.formGroup.controls.password.value;
-    newUser.lastName = this.formGroup.controls.lastName.value;
-    newUser.email = this.formGroup.controls.
-    this.userService.updateUserByID(this.formGroup.).subscribe(user => {
-      this.user = user;
-    });
+  onFormCancel(): void {
+    this.isModalVisible = false;
   }
 }

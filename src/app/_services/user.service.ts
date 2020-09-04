@@ -24,6 +24,17 @@ export class UserService {
     return user;
   }
 
+  private static userModelToJson(user: User): object {
+    return {
+      avatar: user.avatar,
+      email: user.email,
+      firstName: user.firstName,
+      id: user.id,
+      lastName: user.lastName,
+      password: user.password
+    };
+  }
+
   public getUserByID(id: number): Observable<User> {
     return this.http.get<any>(`/users/` + id).pipe(map(userObject => {
       return UserService.jsonToUserModel(userObject);
@@ -55,7 +66,7 @@ export class UserService {
   }
 
   public updateUserByID(user: User): Observable<User> {
-    return this.http.put('/users/' + user.id.toString(), { user }).pipe(map(responseData => {
+    return this.http.put('/users/' + user.id.toString(), UserService.userModelToJson(user)).pipe(map(responseData => {
       return UserService.jsonToUserModel(responseData);
     }));
   }
