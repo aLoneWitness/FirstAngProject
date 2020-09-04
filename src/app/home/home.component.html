@@ -1,21 +1,53 @@
 
-  <nz-table #basicTable [nzData]="userBatch" [nzFrontPagination]="false" [nzTotal]="totalUserAmount" [nzPageSize]="pageSize" [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzLoading]="loading">
-    <thead>
-    <tr>
-      <th>Picture</th>
-      <th>Name</th>
-      <th>Email Address</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let user of userBatch">
-      <td><img src="{{user.avatar}}" alt="No Picture" style="max-width: 50px"></td>
-      <td>{{user.lastName + ', ' + user.firstName }}</td>
-      <td>{{user.email}}</td>
-      <td>
-        <a (click)="routeToProfile(user.id)" class="text-teal-500 hover:text-blue-800">Visit Profile</a>
-      </td>
-    </tr>
-    </tbody>
-  </nz-table>
+<!--  <button nz-button nzType="primary" nzShape="round" (click)="openEditProfileModal()">Add</button>-->
+<button (click)="openCreateProfileModal()" class="mt-2 mb-2 ml-2" nz-button nzType="default" ><i nz-icon nzType="user-add" nzTheme="outline"></i>Add</button>
+
+<nz-table class="p-2" #basicTable [nzData]="userBatch" [nzFrontPagination]="false" [nzTotal]="totalUserAmount" [nzPageSize]="pageSize" [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzLoading]="loading">
+  <thead>
+  <tr>
+    <th>Picture</th>
+    <th>Name</th>
+    <th>Email Address</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of userBatch">
+    <td><img src="{{user.avatar}}" alt="No Picture" style="max-width: 50px"></td>
+    <td>{{user.lastName + ', ' + user.firstName }}</td>
+    <td>{{user.email}}</td>
+    <td>
+      <a (click)="routeToProfile(user.id)" class="text-teal-500 hover:text-blue-800">Visit Profile</a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal [(nzVisible)]="isModalVisible" nzTitle="Create User" (nzOnOk)="submitForm()" (nzOnCancel)="onFormCancel()" [nzOkText]="'Save'" [nzOkLoading]="isFormLoading" [nzOkDisabled]="!formGroup.valid">
+  <form nz-form [nzLayout]="'vertical'" [formGroup]="formGroup">
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+        Email
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="jarpis@jarpis.nl" formControlName="email">
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="firstName">
+        First Name
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="firstName" type="text" placeholder="Mark" formControlName="firstName">
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="lastName">
+        Last Name
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lastName" type="text" placeholder="Zuckerberg" formControlName="lastName">
+    </div>
+    <div class="mb-6">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+        Password
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" formControlName="password">
+    </div>
+  </form>
+</nz-modal>

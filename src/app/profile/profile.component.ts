@@ -60,9 +60,8 @@ export class ProfileComponent implements OnInit {
   }
 
   submitForm(e?: Event): void {
-    console.log("FORM SUBMISSION")
+    if (!this.formGroup.valid) { return; }
     if (e) {
-      console.log("EVENT GIVEN");
       e.stopPropagation();
       e.preventDefault();
     }

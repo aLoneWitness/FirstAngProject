@@ -70,4 +70,10 @@ export class UserService {
       return UserService.jsonToUserModel(responseData);
     }));
   }
+
+  public createUser(newUser: User): Observable<User> {
+    return this.http.post('/users', UserService.userModelToJson(newUser)).pipe(map(createdUser => {
+      return UserService.jsonToUserModel(createdUser);
+    }));
+  }
 }
