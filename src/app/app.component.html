@@ -13,9 +13,9 @@
       <a routerLink="" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
         Home
       </a>
-      <a (click)="goToMyProfile()" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-        My Profile
-      </a>
+<!--      <a (click)="goToMyProfile()" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">-->
+<!--        My Profile-->
+<!--      </a>-->
     </div>
     <div>
       <nz-button-group *ngIf="isAuthenticated">
@@ -29,7 +29,7 @@
 
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item>My Profile</li>
+          <li nz-menu-item (click)="goToMyProfile()">My Profile</li>
           <li nz-menu-divider></li>
           <li nz-menu-item class="logout" (click)="logout()">
             Logout

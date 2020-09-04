@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   public formGroup: FormGroup;
 
   constructor(private userService: UserService, private route: Router, private fb: FormBuilder) {
-    this.pageSize = 7;
+    this.pageSize = 10;
     this.formGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       firstName: ['', [Validators.required]],
