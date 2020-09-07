@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {HomeComponent} from './home/home.component';
 import {AuthenticatedGuard} from './_guards/authenticated.guard';
 import {ProfileComponent} from './profile/profile.component';
+import {UserResolver} from './_resolvers/user.resolver';
 
 const appRoutes: Routes = [
   {
@@ -18,7 +19,8 @@ const appRoutes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [AuthenticatedGuard]
+    canActivate: [AuthenticatedGuard],
+    resolve: { user: UserResolver }
   }
 ];
 

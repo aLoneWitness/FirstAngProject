@@ -16,8 +16,9 @@ export class ProfileComponent implements OnInit {
   public isFormLoading = false;
   public isModalVisible = false;
 
-  constructor(private route: Router, private activatedRoute: ActivatedRoute,
-              private userService: UserService, private modalService: NzModalService, private fb: FormBuilder) {
+  constructor(private router: Router, private userService: UserService,
+              private modalService: NzModalService, private fb: FormBuilder,
+              private route: ActivatedRoute) {
     this.formGroup = this.fb.group({
       avatar: [this.user.avatar, [Validators.required]],
       email: [this.user.email, [Validators.required, Validators.email]],
@@ -28,26 +29,19 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let userId: number;
-    this.activatedRoute.paramMap.subscribe(params => {
-      userId = +params.get('id');
-    });
+    this.user = this.route.snapshot.data.user;
 
-    this.userService.getUserByID(userId).subscribe(userData => {
-      this.user = userData;
-
-      this.formGroup.controls.avatar.setValue(this.user.avatar);
-      this.formGroup.controls.email.setValue(this.user.email);
-      this.formGroup.controls.firstName.setValue(this.user.firstName);
-      this.formGroup.controls.lastName.setValue(this.user.lastName);
-      this.formGroup.controls.password.setValue(this.user.password);
-    });
+    this.formGroup.controls.avatar.setValue(this.user.avatar);
+    this.formGroup.controls.email.setValue(this.user.email);
+    this.formGroup.controls.firstName.setValue(this.user.firstName);
+    this.formGroup.controls.lastName.setValue(this.user.lastName);
+    this.formGroup.controls.password.setValue(this.user.password);
   }
 
   deleteUser(): void {
     this.userService.deleteUserByID(this.user.id).subscribe(isSuccesfull => {
       if (isSuccesfull) {
-        this.route.navigate(['']);
+        this.router.navigate(['']);
       }
       else {
         window.alert('Something went wrong');
