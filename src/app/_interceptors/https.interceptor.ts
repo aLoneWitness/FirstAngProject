@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 export class HttpsInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Todo: Un-hardcode the URL
-    const baseUrl = 'https://testapi.jarpiscloud.nl/api/v1';
+    const baseUrl = 'https://skill.jarpiscloud.nl/api/v1';
     req = req.clone({
       url: baseUrl + req.url
     });

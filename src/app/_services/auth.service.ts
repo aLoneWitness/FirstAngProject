@@ -29,6 +29,7 @@ export class AuthenticationService {
     this.currentUserIsAuthenticated = this.currentUserIsAuthenticatedSubject.asObservable().pipe(tap(console.log));
   }
 
+  // TODO: LEID DIT AF VAN ANDERE DATA EN MAAK DIT NIET EEN TOGGLEABLE BOOL
   public get isAuthenticated(): Observable<boolean> {
     return this.currentUserIsAuthenticatedSubject.asObservable().pipe(tap(isAuth => console.log('IS_AUTH', isAuth)));
   }
