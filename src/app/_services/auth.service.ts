@@ -34,7 +34,7 @@ export class AuthenticationService {
     return this.currentUserIsAuthenticatedSubject.asObservable().pipe(tap(isAuth => console.log('IS_AUTH', isAuth)));
   }
 
-  public login(email: string, password: string): any {
+  public login(email: string, password: string): Observable<any> {
     this.currentUserIsAuthenticatedSubject.next(true);
 
     return this.http.post<any>(`/auth/login`, { email, password })
